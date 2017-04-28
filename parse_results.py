@@ -73,4 +73,9 @@ if __name__ == '__main__':
 
     metric = eval_detection(bboxes, labels, confs, gt_bboxes, gt_labels, len(pascal_voc_labels), gt_difficults,
                             use_07_metric=True)
+
+    labels = pascal_voc_labels[1:]
+    for i, label in enumerate(labels):
+        print(label, metric[i+1]['ap'])
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     print metric['map']
