@@ -7,7 +7,7 @@ from chainercv.datasets.pascal_voc.voc_utils import pascal_voc_labels
 from chainercv.evaluations import eval_detection
 
 
-def read_pascal_predictions(base_dir):
+def read_pascal_predictions(base_dir, ids):
     d = {}
 
     for fn in os.listdir(base_dir):
@@ -16,12 +16,14 @@ def read_pascal_predictions(base_dir):
             if r is not None:
                 d[label] = os.path.join(base_dir, fn)
 
-    img_ids_list = []
-    bboxes_list = []
-
     bboxes = {}
     labels = {}
     confs = {}
+    for id_ in ids:
+        bboxes[id_] = []
+        labels[id_] = []
+        confs[id_] = []
+
     for label, fn in d.items():
         for l in open(fn):
             split = l.split()
@@ -30,26 +32,22 @@ def read_pascal_predictions(base_dir):
             bbox = np.array([
                 float(split[2]), float(split[3]),
                 float(split[4]), float(split[5])])
-            if img_id not in bboxes:
-                bboxes[img_id] = []
-                labels[img_id] = []
-                confs[img_id] = []
             bboxes[img_id].append(bbox)
             labels[img_id].append(pascal_voc_labels.index(label))
             confs[img_id].append(conf)
 
     
-    ids = bboxes.keys()
     bboxes = [np.array(bboxes[id_]) for id_ in ids]
     labels = [np.array(labels[id_]) for id_ in ids]
     confs = [np.array(confs[id_]) for id_ in ids]
     return ids, bboxes, labels, confs
 
 
-def read_gt_annos(fn, ids):
+def read_gt_annos(fn):
     with open(fn, 'rb') as f:
         annots = pickle.load(f)
 
+    ids = sorted(annots.keys())
     # print annots
     gt_bboxes = [[] for _ in range(len(ids))]
     gt_labels = [[] for _ in range(len(ids))]
@@ -63,15 +61,15 @@ def read_gt_annos(fn, ids):
         gt_bboxes[i] = np.array(gt_bboxes[i])
         gt_labels[i] = np.array(gt_labels[i])
         gt_difficults[i] = np.array(gt_difficults[i], dtype=np.bool)
-    return gt_bboxes, gt_labels, gt_difficults
+    return gt_bboxes, gt_labels, gt_difficults, ids
 
 
 if __name__ == '__main__':
     base_dir = 'Main'
-    ids, bboxes, labels, confs = read_pascal_predictions(base_dir)
+    anno_fn = 'annotations_cache/annots.pkl'
+    gt_bboxes, gt_labels, gt_difficults, ids = read_gt_annos(anno_fn)
 
-    anno_fn = 'annots.pkl'
-    gt_bboxes, gt_labels, gt_difficults = read_gt_annos(anno_fn, ids)
+    ids, bboxes, labels, confs = read_pascal_predictions(base_dir, ids)
 
     metric = eval_detection(bboxes, labels, confs, gt_bboxes, gt_labels, len(pascal_voc_labels), gt_difficults,
                             use_07_metric=True)
