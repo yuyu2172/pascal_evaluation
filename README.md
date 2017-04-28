@@ -1,8 +1,25 @@
 # Evaluation of PASCAL VOC Detection task
 
+This repository contains scripts to evaluate results produced by FasterRCNN implementation found at https://github.com/rbgirshick/py-faster-rcnn
 
-results from the original code
+This repository is created to verify the implementation of the evaluation code that is added to ChainerCV.
 
+https://github.com/pfnet/chainercv/pull/130
+
+# Directory structure
+
+```
+Annotations:  Annotations for PASCAL VOC 2007 detection tasks.
+ImageSets:  There is a text file that contains a list of file ids to look for.
+Main: A text file that contains coordinates of predicted bounding boxes.
+annotations_cache:  cached annotations
+```
+
+
+
+# Evaluation results 
+
+Results obtained by an evaluation code found at https://github.com/rbgirshick/py-faster-rcnn
 
 ```
 
@@ -35,10 +52,13 @@ $ python call_original.py
 
 
 
-results from the reimplemented code
+Results obtained from the reimplemented code.
 
 
 ```
+
+$ pyhton parse_results.py
+
 ('aeroplane', 0.67864799899108375)
 ('bicycle', 0.78249248815967498)
 ('bird', 0.66738567468225019)
