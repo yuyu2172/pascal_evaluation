@@ -4,7 +4,7 @@ import os
 import pickle
 from chainercv.datasets.pascal_voc.voc_utils import pascal_voc_labels  
 
-from chainercv.evaluations import eval_detection
+from chainercv.evaluations import eval_detection_voc
 
 
 def read_pascal_predictions(base_dir, ids):
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     ids, bboxes, labels, confs = read_pascal_predictions(base_dir, ids)
 
-    metric = eval_detection(bboxes, labels, confs, gt_bboxes, gt_labels, len(pascal_voc_labels), gt_difficults,
+    metric = eval_detection_voc(bboxes, labels, confs, gt_bboxes, gt_labels, len(pascal_voc_labels), gt_difficults,
                             use_07_metric=True)
 
     labels = pascal_voc_labels[1:]
