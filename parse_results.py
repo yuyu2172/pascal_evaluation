@@ -71,11 +71,12 @@ if __name__ == '__main__':
 
     ids, bboxes, labels, confs = read_pascal_predictions(base_dir, ids)
 
-    metric = eval_detection_voc(bboxes, labels, confs, gt_bboxes, gt_labels, len(pascal_voc_labels), gt_difficults,
+    metric = eval_detection_voc(bboxes, labels, confs, gt_bboxes, gt_labels, gt_difficults,
                             use_07_metric=True)
 
     labels = pascal_voc_labels[1:]
     for i, label in enumerate(labels):
-        print(label, metric[i+1]['ap'])
+        if i + 1 in metric:
+            print(label, metric[i+1]['ap'])
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     print metric['map']
