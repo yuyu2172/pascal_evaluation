@@ -2,7 +2,7 @@ from original import voc_eval
 from chainercv.datasets.pascal_voc.voc_utils import voc_detection_label_names
 import numpy as np
 
-labels = voc_detection_label_names[1:]
+labels = voc_detection_label_names
 
 aps = []
 for label in labels:
