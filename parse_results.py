@@ -2,7 +2,7 @@ import re
 import numpy as np
 import os
 import pickle
-from chainercv.datasets.pascal_voc.voc_utils import pascal_voc_labels  
+from chainercv.datasets.pascal_voc.voc_utils import voc_detection_label_names
 
 from chainercv.evaluations import eval_detection_voc
 
@@ -11,7 +11,7 @@ def read_pascal_predictions(base_dir, ids):
     d = {}
 
     for fn in os.listdir(base_dir):
-        for label in pascal_voc_labels:
+        for label in voc_detection_label_names:
             r = re.match('\S+_test_{}.txt'.format(label), fn)
             if r is not None:
                 d[label] = os.path.join(base_dir, fn)
@@ -33,7 +33,7 @@ def read_pascal_predictions(base_dir, ids):
                 float(split[2]), float(split[3]),
                 float(split[4]), float(split[5])])
             bboxes[img_id].append(bbox)
-            labels[img_id].append(pascal_voc_labels.index(label))
+            labels[img_id].append(voc_detection_label_names.index(label))
             confs[img_id].append(conf)
 
     
@@ -56,7 +56,7 @@ def read_gt_annos(fn):
         anno = annots[id_]
         for anno_elem in anno:
             gt_bboxes[i].append(anno_elem['bbox'])
-            gt_labels[i].append(pascal_voc_labels.index(anno_elem['name']))
+            gt_labels[i].append(voc_detection_label_names.index(anno_elem['name']))
             gt_difficults[i].append(anno_elem['difficult'])
         gt_bboxes[i] = np.array(gt_bboxes[i])
         gt_labels[i] = np.array(gt_labels[i])
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     metric = eval_detection_voc(bboxes, labels, confs, gt_bboxes, gt_labels, gt_difficults,
                             use_07_metric=True)
 
-    labels = pascal_voc_labels[1:]
+    labels = voc_detection_label_names[1:]
     for i, label in enumerate(labels):
         if i + 1 in metric:
             print(label, metric[i+1]['ap'])

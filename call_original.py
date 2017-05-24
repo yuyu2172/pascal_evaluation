@@ -1,8 +1,8 @@
 from original import voc_eval
-from chainercv.datasets.pascal_voc.voc_utils import pascal_voc_labels
+from chainercv.datasets.pascal_voc.voc_utils import voc_detection_label_names
 import numpy as np
 
-labels = pascal_voc_labels[1:]
+labels = voc_detection_label_names[1:]
 
 aps = []
 for label in labels:
