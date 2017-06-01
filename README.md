@@ -1,3 +1,6 @@
+# THIS NO LONGER WORKS
+
+
 # Evaluation of PASCAL VOC Detection task
 
 This repository contains scripts to evaluate results produced by FasterRCNN implementation found at https://github.com/rbgirshick/py-faster-rcnn
